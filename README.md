@@ -4,7 +4,7 @@
 
 2. Install Pip:
   ```sh
-  sudo apt-get install python3-pip```
+  sudo apt-get install python3-pip
   ```
 
 3. Install Python libraries:
@@ -21,9 +21,8 @@
 
 ## Running
 
-Run:
   ```sh
-  python3 stream.py \
+  ./collect.sh \
     --consumer_key YOUR_TWITTER_CONSUMER_KEY \
     --consumer_secret YOUR_TWITTER_CONSUMER_SECRET \
     --access_token_key YOUR_TWITTER_ACCESS_TOKEN_KEY \
