@@ -4,10 +4,11 @@ import argparse
 import rethinkdb
 
 parser = argparse.ArgumentParser(description="Create a tweet table.")
+parser.add_argument("--password")
 parser.add_argument("--database", required=True)
 parser.add_argument("--table", default="tweets")
 flags = parser.parse_args()
 
-rethinkdb.connect().repl()
+rethinkdb.connect(password=flags.password).repl()
 rethinkdb.db_create(flags.database)
 rethinkdb.db(flags.database).table_create(flags.table)

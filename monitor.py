@@ -15,7 +15,7 @@ class Monitor(object):
 
     self.recent_tweets = collections.deque()
     self.start_time = datetime.datetime.now()
-    self.db_connection = r.connect()
+    self.db_connection = r.connect(password=flags.password)
     self.server = self.make_server()
     self.thread = threading.Thread(
       target=self.server.run,
@@ -24,7 +24,6 @@ class Monitor(object):
     )
 
     self.thread.start()
-    print(humanize.naturaltime(self.uptime()))
 
   def record_tweet(self, tweet):
     tweet = copy.copy(tweet)
