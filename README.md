@@ -9,7 +9,7 @@
 
 3. Install Python libraries:
   ```sh
-  sudo pip3 install flask python-twitter pytz rethinkdb
+  sudo pip3 install flask humanize python-twitter pytz rethinkdb
   ```
 
 4. Create the table to store tweets in:

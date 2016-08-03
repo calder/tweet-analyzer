@@ -5,7 +5,8 @@ import rethinkdb
 
 parser = argparse.ArgumentParser(description="Clear a tweet table.")
 parser.add_argument("--database", required=True)
+parser.add_argument("--table", default="tweets")
 flags = parser.parse_args()
 
 rethinkdb.connect().repl()
-rethinkdb.db(flags.database).table("tweets").delete().run()
+rethinkdb.db(flags.database).table(flags.table).delete().run()

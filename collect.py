@@ -1,31 +1,17 @@
 #!/usr/bin/env python3
 
-import argparse
 import datetime
 import pytz
-import rethinkdb
+import rethinkdb as r
 import twitter
 
+from flags import flags
 from monitor import Monitor
-
-parser = argparse.ArgumentParser(
-  description="Download live tweets on a topic.",
-)
-
-parser.add_argument("--consumer_key", required=True)
-parser.add_argument("--consumer_secret", required=True)
-parser.add_argument("--access_token_key", required=True)
-parser.add_argument("--access_token_secret", required=True)
-parser.add_argument("--database", required=True)
-parser.add_argument("--filter", required=True, nargs="+")
-
-flags = parser.parse_args()
 
 monitor = Monitor()
 
-rethinkdb.connect().repl()
-db = rethinkdb.db(flags.database)
-tweets = db.table("tweets")
+db_connection = r.connect()
+table = r.db(flags.database).table(flags.table)
 
 api = twitter.Api(
   consumer_key=flags.consumer_key,
@@ -43,5 +29,5 @@ for tweet in stream:
     "text": tweet["text"],
     "user": tweet["user"]["name"],
   }
-  tweets.insert([row]).run()
+  table.insert([row]).run(db_connection)
   monitor.record_tweet(row)
