@@ -10,7 +10,7 @@ from monitor import Monitor
 
 monitor = Monitor()
 
-db_connection = r.connect(password=flags.password)
+db_connection = r.connect()
 table = r.db(flags.database).table(flags.table)
 
 api = twitter.Api(

@@ -15,7 +15,7 @@ class Monitor(object):
 
     self.recent_tweets = collections.deque()
     self.start_time = datetime.datetime.now()
-    self.db_connection = r.connect(password=flags.password)
+    self.db_connection = r.connect()
     self.server = self.make_server()
     self.thread = threading.Thread(
       target=self.server.run,
