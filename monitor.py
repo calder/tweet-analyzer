@@ -17,7 +17,11 @@ class Monitor(object):
     self.start_time = datetime.datetime.now()
     self.db_connection = r.connect()
     self.server = self.make_server()
-    self.thread = threading.Thread(target=self.server.run, daemon=True)
+    self.thread = threading.Thread(
+      target=self.server.run,
+      kwargs={"host": "0.0.0.0"},
+      daemon=True,
+    )
 
     self.thread.start()
     print(humanize.naturaltime(self.uptime()))
