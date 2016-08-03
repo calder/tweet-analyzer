@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
+import datetime
+import pytz
 import rethinkdb
 import twitter
+
+from monitor import Monitor
 
 parser = argparse.ArgumentParser(
   description="Download live tweets on a topic.",
@@ -16,6 +20,8 @@ parser.add_argument("--database", required=True)
 parser.add_argument("--filter", required=True, nargs="+")
 
 flags = parser.parse_args()
+
+monitor = Monitor()
 
 rethinkdb.connect().repl()
 db = rethinkdb.db(flags.database)
@@ -32,9 +38,10 @@ stream = api.GetStreamFilter(track=flags.filter)
 
 for tweet in stream:
   row = {
+    "timestamp": pytz.utc.localize(datetime.datetime.utcfromtimestamp(int(tweet["timestamp_ms"]) / 1000.0)),
     "followers": tweet["user"]["followers_count"],
     "text": tweet["text"],
     "user": tweet["user"]["name"],
   }
   tweets.insert([row]).run()
-  print(row)
+  monitor.record_tweet(row)
