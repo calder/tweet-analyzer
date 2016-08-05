@@ -23,11 +23,17 @@ api = twitter.Api(
 stream = api.GetStreamFilter(track=flags.filter)
 
 for tweet in stream:
-  row = {
-    "timestamp": pytz.utc.localize(datetime.datetime.utcfromtimestamp(int(tweet["timestamp_ms"]) / 1000.0)),
-    "followers": tweet["user"]["followers_count"],
-    "text": tweet["text"],
-    "user": tweet["user"]["name"],
-  }
-  table.insert([row]).run(db_connection)
-  monitor.record_tweet(row)
+  try:
+    row = {
+      "timestamp": pytz.utc.localize(datetime.datetime.utcfromtimestamp(int(tweet["timestamp_ms"]) / 1000.0)),
+      "followers": tweet["user"]["followers_count"],
+      "text": tweet["text"],
+      "user": tweet["user"]["name"],
+    }
+    table.insert([row]).run(db_connection)
+    monitor.record_tweet(row)
+  except:
+    print("------------------------------------------------------------")
+    print(tweet)
+    print("------------------------------------------------------------")
+    raise
