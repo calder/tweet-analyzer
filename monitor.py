@@ -17,11 +17,7 @@ class Monitor(object):
     self.start_time = datetime.datetime.now()
     self.db_connection = r.connect()
     self.server = self.make_server()
-    self.thread = threading.Thread(
-      target=self.server.run,
-      kwargs={"host": "0.0.0.0"},
-      daemon=True,
-    )
+    self.thread = threading.Thread(target=self.server.run, daemon=True)
 
     self.thread.start()
 
@@ -36,7 +32,7 @@ class Monitor(object):
         self.recent_tweets.pop()
 
   def tweet_count(self):
-    return r.db(flags.database).table(flags.table).count().run(self.db_connection)
+    return r.db(flags.database).table(flags.table).info()["doc_count_estimates"].run(self.db_connection)[0]
 
   def uptime(self):
     return datetime.datetime.now() - self.start_time
